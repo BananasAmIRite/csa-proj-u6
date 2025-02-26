@@ -1,5 +1,3 @@
-import javax.management.loading.PrivateClassLoader;
-
 public class SentimentAnalysisResult {
     private double positivity; 
     private double pleasentness; 
@@ -24,6 +22,9 @@ public class SentimentAnalysisResult {
     }
 
     public String toString() {
-        return "Sentiment Analysis: \n" + "----------------------\n" + "Positivity: " + positivity + "\n" + "Pleasantness: " + pleasentness + "\n" + "Excitement: " + excitement; 
+        return "Sentiment Analysis: \n" + "----------------------\n" + 
+        "Positivity: " + String.format("%.3f", positivity) + "\n" +  
+        "Pleasantness: " + String.format("%.3f", pleasentness) + "\n" + 
+        "Excitement: " +  String.format("%.3f", excitement);
     }
 }

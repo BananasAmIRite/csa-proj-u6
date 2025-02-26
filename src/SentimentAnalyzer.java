@@ -1,11 +1,10 @@
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SentimentAnalyzer {
+    // list of words that are not included in sentiment analysis, since they are common and have no inherent sentiment meaning
     private ArrayList<String> stopWords; 
+    
+    // SentimentData objects corresponding to the word dictionary of each emotion
     private SentimentData positivityData; 
     private SentimentData pleasentnessData; 
     private SentimentData excitementData; 
@@ -13,17 +12,16 @@ public class SentimentAnalyzer {
     public SentimentAnalyzer(String stopWordsFile) {
         this.stopWords = parseStopWords(stopWordsFile); 
 
-        this.positivityData = new SentimentData("words_positivity.txt"); 
-        this.excitementData = new SentimentData("words_excitedness.txt"); 
-        this.pleasentnessData = new SentimentData("words_pleasantness.txt"); 
+        String folder = "C:\\Users\\jason\\Desktop\\csa-project-u6\\n" + //
+        "lp\\"; 
+
+        this.positivityData = new SentimentData(folder + "words_positivity.txt"); 
+        this.excitementData = new SentimentData(folder + "words_excitedness.txt"); 
+        this.pleasentnessData = new SentimentData(folder + "words_pleasantness.txt"); 
     }
 
     private ArrayList<String> parseStopWords(String file) {
-        // TODO: use FileReader#toStringList (apparently it's not a built-in java method :P)
-        List<String> stopWords = new ArrayList<>(); 
-        try {
-            stopWords = Files.readAllLines(new File(file).toPath());
-        } catch (IOException e) {}
+        ArrayList<String> stopWords = FileReader.toStringList(file); 
 
         // lowercase all stop words
         ArrayList<String> lowercaseStopWords = new ArrayList<>(); 
@@ -53,6 +51,7 @@ public class SentimentAnalyzer {
         double score = 0; 
         int wordCount = 0; 
 
+
         for (String word : words) {
             Double wordScore = data.getWordValue(word);
             if (wordScore != null) {
@@ -71,5 +70,13 @@ public class SentimentAnalyzer {
             calculateSentiment(text, pleasentnessData), 
             calculateSentiment(text, excitementData)
         ); 
+    }
+
+    public SentimentAnalysisResult calculateTotalSentiment(ArrayList<String> textList) {
+        String totalText = "";
+        for (String line : textList) {
+            totalText += line + " "; 
+        }
+        return calculateTotalSentiment(totalText); 
     }
 }
